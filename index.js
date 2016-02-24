@@ -31,6 +31,6 @@ function publish(publisher, password, project, edition, form, callback) {
         callback(null, response.headers.location) }
       else {
         var error = new Error()
-        error.statusCode = status
+        error.statusCode = response.statusCode
         callback(error) } })
   .end(JSON.stringify({ form: form })) }
