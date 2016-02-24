@@ -30,7 +30,13 @@ function publish(publisher, password, project, edition, form, callback) {
       if (response.statusCode === 201) {
         callback(null, response.headers.location) }
       else {
-        var error = new Error()
-        error.statusCode = response.statusCode
-        callback(error) } })
+        var buffers = [ ]
+        response
+          .on('data', function(buffer) {
+            buffers.push(buffer) })
+          .on('end', function() {
+            var message = Buffer.concat(buffers).toString()
+            var error = new Error(message)
+            error.statusCode = response.statusCode
+            callback(error) }) } })
   .end(JSON.stringify({ form: form })) }
