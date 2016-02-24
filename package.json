@@ -1,6 +1,6 @@
 {
   "name": "commonform-publish",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "publish projects to projects.commonform.org",
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "repository": "commonform/commonform-publish",
