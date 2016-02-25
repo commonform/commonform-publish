@@ -15,7 +15,7 @@
 
 module.exports = publish
 
-var https = require('http')
+var https = require('https')
 
 function publish(publisher, password, project, edition, form, callback) {
   https.request(
