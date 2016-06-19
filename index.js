@@ -17,11 +17,11 @@ module.exports = publish
 
 var https = require('https')
 
-function publish(publisher, password, project, edition, form, callback) {
+function publish(publisher, password, project, edition, digest, callback) {
   https.request(
     { auth: ( publisher + ':' + password ),
       method: 'POST',
-      host: 'projects.commonform.org',
+      host: 'api.commonform.org',
       path:
         ( '/publishers/' + publisher +
           '/projects/' + project +
@@ -39,4 +39,4 @@ function publish(publisher, password, project, edition, form, callback) {
             var error = new Error(message)
             error.statusCode = response.statusCode
             callback(error) }) } })
-  .end(JSON.stringify({ form: form })) }
+  .end(JSON.stringify({ digest: digest })) }
