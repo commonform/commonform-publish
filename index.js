@@ -16,8 +16,10 @@
 module.exports = publish
 
 var https = require('https')
+var once = require('once')
 
 function publish(publisher, password, project, edition, digest, callback) {
+  once(callback)
   https.request(
     { auth: ( publisher + ':' + password ),
       method: 'POST',
@@ -34,6 +36,10 @@ function publish(publisher, password, project, edition, digest, callback) {
         response
           .on('data', function(buffer) {
             buffers.push(buffer) })
+          .on('aborted', function() {
+            callback(new Error('aborted')) })
+          .on('error', function(error) {
+            callback(error) })
           .on('end', function() {
             var message = Buffer.concat(buffers).toString()
             var error = new Error(message)
