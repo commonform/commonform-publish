@@ -18,31 +18,50 @@ module.exports = publish
 var https = require('https')
 var once = require('once')
 
-function publish(publisher, password, project, edition, digest, callback) {
+function publish (
+  publisher,
+  password,
+  project,
+  edition,
+  digest,
+  callback
+) {
   once(callback)
-  https.request(
-    { auth: ( publisher + ':' + password ),
-      method: 'POST',
-      host: 'api.commonform.org',
-      path:
-        ( '/publishers/' + publisher +
-          '/projects/' + project +
-          '/editions/' + edition ) },
-    function(response) {
+  https.request({
+    auth: publisher + ':' + password,
+    method: 'POST',
+    host: 'api.commonform.org',
+    path: (
+      '/publishers/' + encodeURIComponent(publisher) +
+      '/projects/' + encodeURIComponent(project) +
+      '/editions/' + encodeURIComponent(edition)
+    ),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .once('response', function (response) {
       if (response.statusCode === 201) {
-        callback(null, response.headers.location) }
-      else {
-        var buffers = [ ]
+        callback(null, response.headers.location)
+      } else {
+        var buffers = []
         response
-          .on('data', function(buffer) {
-            buffers.push(buffer) })
-          .on('aborted', function() {
-            callback(new Error('aborted')) })
-          .on('error', function(error) {
-            callback(error) })
-          .on('end', function() {
+          .on('data', function (buffer) {
+            buffers.push(buffer)
+          })
+          .on('aborted', function () {
+            callback(new Error('aborted'))
+          })
+          .on('error', function (error) {
+            callback(error)
+          })
+          .on('end', function () {
             var message = Buffer.concat(buffers).toString()
             var error = new Error(message)
             error.statusCode = response.statusCode
-            callback(error) }) } })
-  .end(JSON.stringify({ digest: digest })) }
+            callback(error)
+          })
+      }
+    })
+    .end(JSON.stringify({digest: digest}))
+}
