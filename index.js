@@ -69,9 +69,7 @@ function publish (
   var calledBack = false
 
   function done (error, result) {
-    if (calledBack) {
-      return
-    } else {
+    if (!calledBack) {
       calledBack = true
       callback(error, result)
     }
