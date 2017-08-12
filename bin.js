@@ -10,7 +10,10 @@ require('./').apply(
   null,
   process.argv.slice(2, 7).concat(function (error, location) {
     if (error) {
-      process.stderr.write(error.toString() + '\n')
+      if (error.statusCode) {
+        console.error('Server responded ' + error.statusCode + '.')
+      }
+      console.error(error)
       process.exit(1)
     } else {
       process.stdout.write(location + '\n')
