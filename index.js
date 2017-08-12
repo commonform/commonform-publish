@@ -16,7 +16,6 @@
 module.exports = publish
 
 var https = require('https')
-var once = require('once')
 
 function publish (
   publisher,
@@ -26,7 +25,6 @@ function publish (
   digest,
   callback
 ) {
-  once(callback)
   https.request({
     auth: publisher + ':' + password,
     method: 'POST',
@@ -49,13 +47,7 @@ function publish (
           .on('data', function (buffer) {
             buffers.push(buffer)
           })
-          .on('aborted', function () {
-            callback(new Error('aborted'))
-          })
-          .on('error', function (error) {
-            callback(error)
-          })
-          .on('end', function () {
+          .once('end', function () {
             var message = Buffer.concat(buffers).toString()
             var error = new Error(message)
             error.statusCode = response.statusCode
@@ -63,5 +55,22 @@ function publish (
           })
       }
     })
+    .once('error', function (error) {
+      callback(error)
+    })
+    .once('aborted', function () {
+      done(new Error('aborted'))
+    })
     .end(JSON.stringify({digest: digest}))
+
+  var calledBack = false
+
+  function done (error, result) {
+    if (calledBack) {
+      return
+    } else {
+      calledBack = true
+      callback(error, result)
+    }
+  }
 }
