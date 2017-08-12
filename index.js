@@ -40,7 +40,7 @@ function publish (
   })
     .once('response', function (response) {
       if (response.statusCode === 201) {
-        callback(null, response.headers.location)
+        done(null, response.headers.location)
       } else {
         var buffers = []
         response
@@ -54,12 +54,12 @@ function publish (
             var message = Buffer.concat(buffers).toString()
             var error = new Error(message)
             error.statusCode = response.statusCode
-            callback(error)
+            done(error)
           })
       }
     })
     .once('error', function (error) {
-      callback(error)
+      done(error)
     })
     .once('aborted', function () {
       done(new Error('aborted'))
