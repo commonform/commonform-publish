@@ -47,6 +47,9 @@ function publish (
           .on('data', function (buffer) {
             buffers.push(buffer)
           })
+          .once('error', function (error) {
+            done(error)
+          })
           .once('end', function () {
             var message = Buffer.concat(buffers).toString()
             var error = new Error(message)
