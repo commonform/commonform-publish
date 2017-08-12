@@ -32,7 +32,7 @@ function publish (
     path: (
       '/publishers/' + encodeURIComponent(publisher) +
       '/projects/' + encodeURIComponent(project) +
-      '/editions/' + encodeURIComponent(edition)
+      '/publications/' + encodeURIComponent(edition)
     ),
     headers: {
       'Content-Type': 'application/json'
