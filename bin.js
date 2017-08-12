@@ -6,8 +6,9 @@ if (process.argv.length !== 7) {
   process.exit(1)
 }
 
-require('./')
-  .apply(null, process.argv.slice(2, 7), function (error, location) {
+require('./').apply(
+  null,
+  process.argv.slice(2, 7).concat(function (error, location) {
     if (error) {
       process.stderr.write(error.toString() + '\n')
       process.exit(1)
@@ -16,3 +17,4 @@ require('./')
       process.exit(0)
     }
   })
+)
