@@ -39,7 +39,8 @@ function publish (
     }
   })
     .once('response', function (response) {
-      if (response.statusCode === 201) {
+      var status = response.statusCode
+      if (status === 201 || status === 204) {
         done(null, response.headers.location)
       } else {
         var buffers = []
