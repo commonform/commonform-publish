@@ -5,6 +5,7 @@
   "author": "Kyle E. Mitchell <kyle@kemitchell.com> (https://kemitchell.com/)",
   "repository": "commonform/commonform-publish",
   "license": "Apache-2.0",
+  "bin": "bin.js",
   "dependencies": {},
   "devDependencies": {
     "standard": "^10.0.3",
